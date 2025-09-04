@@ -6,3 +6,4 @@ sqlalchemy
 tabulate
 uvicorn
 pytest
+jsonschema
