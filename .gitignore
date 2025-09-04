@@ -4,3 +4,6 @@ __pycache__/
 /bearer_test_token.txt
 /bearer_token.txt
 /mydatabase.db
+_pycache__/
+*.py[cod]
+*$py.class
