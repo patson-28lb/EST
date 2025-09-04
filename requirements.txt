@@ -1,0 +1,8 @@
+click
+fastapi
+jose
+requests
+sqlalchemy
+tabulate
+uvicorn
+pytest

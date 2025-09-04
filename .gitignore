@@ -1,0 +1,6 @@
+/.pytest_cache
+/.vscode
+/__pycache__
+/bearer_test_token.txt
+/bearer_token.txt
+/mydatabase.db
