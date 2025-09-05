@@ -7,3 +7,6 @@ __pycache__/
 _pycache__/
 *.py[cod]
 *$py.class
+
+.docker/
+docker-compose.yml.swp

@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 from .model import User, Expense, StatusEnum
 
 # created utils for security using jwt
-from .jwt_utils import create_jwt_token, get_current_user
+from .jwt_utils import create_jwt_token, get_current_user, logout_current_user
 
 # for a list of items
 from typing import List
@@ -71,8 +71,8 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
     "/logout/",
     dependencies=[Security(HTTPBearer())],
 )
-def logout(token_bearer: str = Depends(HTTPBearer())):
-    return token_bearer
+def logout(current_user: str = Depends(logout_current_user)):
+    return {"message":f"Successfully logged {current_user} out!"}
 
 def get_valid_user(db: Session, username: str):
     db_user = db.query(User).filter(User.username == username).first()
