@@ -10,3 +10,5 @@ _pycache__/
 
 .docker/
 docker-compose.yml.swp
+
+.env

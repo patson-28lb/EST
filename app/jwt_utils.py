@@ -11,9 +11,16 @@ from fastapi import Depends, HTTPException
 import uuid
 import redis
 
+from dotenv import load_dotenv
+import os
+
+
 redis_client = redis.Redis(host='redis', port=6379, db=0)
 
-SECRET_KEY = "645f147816f5d7cd8e8f9d76bfc0ccb84bcb5afaa462b32ff7fcc75b714bb052"
+load_dotenv()
+
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
 ALGORITHM = "HS256"
 TOKEN_EXPIRY_TIME_MINUTES = 30
 
