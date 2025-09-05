@@ -1,10 +1,9 @@
 import pytest
-from fastapi.testclient import TestClient
-from app.main import app
-import os
-
 from datetime import datetime
-# creating a test client instance, this allows for testing without making server live
+
+from app.main import app
+from fastapi.testclient import TestClient
+
 client = TestClient(app)
 
 def is_valid_expense_syntax(item):
@@ -40,11 +39,11 @@ def is_valid_expense_syntax(item):
     for optional_field in ["approver_id", "rejection_reason"]:
         if optional_field in item:
             assert isinstance(item[optional_field], (str, type(None)))
-
-# testing get expenses along with return types
-def test_get_expenses():
+            
+            
+def test_get_approvals():
     """
-    Tests the GET /expenses/me to return all my expenses.
+    Tests the GET /approvals/me to return all my approvals.
     It expects a 200 status code and a List of expenses in the response body.
     """
 
@@ -52,21 +51,20 @@ def test_get_expenses():
     
     header = {"Authorization":f"Bearer {token}"}
     
-
     response = client.get("/expenses/me", headers=header)
     assert response.status_code == 200
     
     data = response.json()
     
     assert isinstance(data, list)
-
+    
+    # checking if all data conforms to the data format of an Expense
     for item in data:
         is_valid_expense_syntax(item)
-    
 
-def test_get_expenses_explicitly():
+def test_get_approvals_explicitly():
     """
-    Tests the GET /expenses/me to return a single expenses.
+    Tests the GET /approvals/me to return a single expenses.
     It expects a 200 status code and a an expense in the response body.
     """
 
@@ -75,15 +73,14 @@ def test_get_expenses_explicitly():
     header = {"Authorization":f"Bearer {token}"}
     
 
-    response = client.get("/expenses/me/EID07", headers=header)
+    response = client.get("/expenses/approvals/me/EID07", headers=header)
     assert response.status_code == 200
     
     data = response.json()
     assert isinstance(data, dict)
     
     is_valid_expense_syntax(data)
-            
-            
+    
 def get_auth_token():
    
     payload = {
