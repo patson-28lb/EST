@@ -50,6 +50,47 @@ def get_auth_token():
         print("Token file does not exist!")
         raise FileNotFoundError
     
+def logout_user():
+    """
+    Method to log out a user
+    this goes to the method post/logout
+    additionally this will delete the token saved locally and black list it
+    """
+    url = BASE_URL + '/logout/'
+    try:
+        token = get_auth_token()
+    except FileNotFoundError:
+        sys.exit("Please reauthenticate!")
+    
+    headers = {"Authorization": f"Bearer {token}"}
+    
+    try:
+        print("Attempting to logout...")
+        response = requests.post(url, headers=headers)
+        
+        if response.status_code == 200:
+            response_data = response.json()
+            file_path = 'bearer_token.txt'
+            print(response_data.get("message"))
+            # Check if the file exists and delete it
+            if os.path.exists(file_path):
+                os.remove(file_path)
+                print(f"Deleted token file: {file_path}")
+            else:
+                print(f"Attempted to delete token file, but it was not found: {file_path}")
+    
+        else:
+            print(f"\nFailed to logout with status code:{response.status_code}")
+            # Print the error message or details from the server's response.
+            print("Response from server:")
+            print(response.json())
+        
+    except requests.exceptions.ConnectionError:        
+        print(f"\nError: Could not connect to the server at '{url}'.")
+        print("Please ensure your FastAPI server is running.")
+    except Exception as e:
+        # Catch any other potential errors.
+        print(f"\nAn unexpected error occurred: {e}")
     
 def login_user(user: UserLogin):
     """
@@ -387,7 +428,12 @@ def login(username, password):
     """Allows you to log in to the EMS"""
     user = UserLogin(username, password)
     login_user(user)
-    
+
+@cli.command()
+def logout():
+    """Allows you to log out of the EMS"""
+    logout_user()
+
 # command to get my expenses
 @cli.command()
 @click.option('--expense_id', '-e', type=str, help='Optional: View a specific expense by ID.')
